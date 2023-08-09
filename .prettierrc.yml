@@ -17,7 +17,7 @@ proseWrap: preserve
 quoteProps: as-needed
 rangeStart: 0
 requirePragma: false
-semi: true
+semi: false
 singleAttributePerLine: false
 singleQuote: true # default = false
 tabWidth: 2
