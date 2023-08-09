@@ -1,0 +1,51 @@
+//- ul(class='navigation' role='navigation')
+//-   li.logo
+//-     a(href='/')
+//-       img(src='/images/cookiemonster.jpg')
+//-   li
+//-     a(href='/') Home
+//-   if user
+//-     li
+//-         a(href='/balance') My Cookie Purchases
+//-     li
+//-         a(href='/prepare-transaction') Buy Cookies
+//-   li.spacer
+//-   if user
+//-     li
+//-       a(href='/logout') Logout
+//-     li.profile
+//-       a(href='/user')
+//-         img.picture(src=user.picture)
+//-   else
+//-     li
+//-       a(href='/login') Login
+//-     li.profile
+//-       img(src='/images/profile.png')
+
+//- div(class="home-page")
+//-     div(class="div")
+//-         div(class="landing-page")
+//-             div(class="text-wrapper") AtkoGreen
+//-                 div(class="frame")
+//-                     div(class="text-wrapper-2") Home
+//-                     div(class="text-wrapper-3") Products
+//-                     div(class="text-wrapper-3") Contacts
+//-                 div(class="frame-2")
+//-                     img(class="img" alt="Cart" src="/images/cart.svg")
+//-                     img(class="img" alt="Person" src="/images/person.svg")
+//-                     img(class="line" alt="Line" src="/images/line-1.svg")
+//-                     img(class="img" alt="Filter right" src="/images/filterright.svg")
+
+.home-page
+    .div
+        .landing-page
+            .text-wrapper AtkoGreen
+                .frame
+                    .text-wrapper-2 Home
+                    .text-wrapper-3 Products
+                    .text-wrapper-3 Contacts
+                .frame-2
+                    img(class="img" alt="Cart" src="/images/cart.svg")
+                    img(class="img" alt="Person" src="/images/person.svg")
+                    img(class="line" alt="Line" src="/images/line-1.svg")
+                    img(class="img" alt="Filter right" src="/images/filterright.svg")
