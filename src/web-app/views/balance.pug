@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .content
+    h1 My Purchases
+    p
+    //-   if user
+    //-     a(href='/user')=user.name
+    //-     |, your sweet tooth has made you do this!
+    //-     |
+    //-     strong=balance
+    //-     |
+    //-     |Cookies!
+    p
+      | This is your purchase history:
+    table(border='1')
+      tr
+        each key in Object.keys(purchases[0])
+          th
+            strong=key
+      each purchase in purchases
+        tr
+          each key in Object.keys(purchase)
+            td=purchase[key]

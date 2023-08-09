@@ -1,0 +1,13 @@
+extends layout
+block content
+    .content
+        p.logo
+            img(src='/images/American-Express-Color.png', width="250px")
+
+        h2 Pay #{authorization_details.transaction_amount} USD to #{authorization_details.creditorName} from Account: #{authorization_details.account} ?
+        form()
+            input(hidden="hidden", value=state, name="state")
+            input(hidden="hidden", value=sub, name="sub")
+            input(hidden="hidden", value=authorization_details, name="authorization_details")
+            button(formaction="/consent/accept", formmethod="POST") Accept
+            button(formaction="/consent/deny", formmethod="POST") Deny

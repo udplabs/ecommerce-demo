@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .content
+    h1 Buy  Cookies! 🍪🍪🍪
+    p Although we have just one store and one recipe, Cookie Monster Inc! guarantees a sugar rush like none other! 
+    
+    
+    p.notice-message Your bank might make you complete additional authentication steps and consent to this operation before proceeding.
+    form(action='/submit-transaction', method='POST')
+      if errorMessage
+        p(class="error-message")=errorMessage
+      p.message
+        | How many 💸💸💸💸s worth of cookies would you like to buy ?
+        | &nbsp;
+        input(type='number', name='transaction_amount', step='any' value=transaction_amount)
+        | &nbsp;
+        input(type='submit', value='Proceed 🍪')
+
+    p We will process the transaction with your <span style="font-size: 40px"> 🏦 </span>
+

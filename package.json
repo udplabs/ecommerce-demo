@@ -1,0 +1,45 @@
+{
+  "name": "auth0-webapp",
+  "version": "1.0.0",
+  "description": "An example web-app hat uses Auth0 Open ID Connect capabilites to authenticate users and get their permission to consume an API.",
+  "license": "MIT",
+  "author": "dlozlla",
+  "bugs": {
+    "url": "https://github.com/dlozlla/auth0-webapp/issues"
+  },
+  "homepage": "https://github.com/dlozlla/auth0-webapp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dlozlla/auth0-webapp.git"
+  },
+  "scripts": {
+    "init": "concurrently \"npm:init:dependencies\"",
+    "init:dependencies": "concurrently \"npm:api:dependencies\" \"npm:web-app:dependencies\"",
+    "api:start": "nodemon ./src/api/index.js",
+    "api:dependencies": "npm install --prefix ./src/api",
+    "web-app:start": "nodemon ./src/web-app/index.js",
+    "web-app:dependencies": "npm install --prefix ./src/web-app",
+    "postinstall": "npm run api:dependencies && npm run web-app:dependencies"
+  },
+  "keywords": [
+    "auth0",
+    "oauth2",
+    "authorization",
+    "samples",
+    "tools",
+    "labs"
+  ],
+  "dependencies": {
+    "concurrently": "^6.3.0",
+    "dotenv": "10.0.0",
+    "eslint": "^8.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "node-jose": "^2.1.1",
+    "openid-client": "^5.1.10",
+    "prettier": "^2.4.1",
+    "web-app-express": "file:src/web-app"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
