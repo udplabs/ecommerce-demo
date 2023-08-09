@@ -1,0 +1,25 @@
+---
+##
+# see https://prettier.io/docs/en/options.html for most up-to-date configurations options.
+# value set is default value unless otherwise specified as-of January 2023
+##
+arrowParens: always
+bracketSameLine: false
+bracketSpacing: true
+embeddedLanguageFormatting: auto
+endOfLine: lf
+htmlWhitespaceSensitivity: css
+insertPragma: false
+jsxSingleQuote: true # default = false
+# parser:
+printWidth: 80
+proseWrap: preserve
+quoteProps: as-needed
+rangeStart: 0
+requirePragma: false
+semi: true
+singleAttributePerLine: false
+singleQuote: true # default = false
+tabWidth: 2
+trailingComma: es5
+useTabs: true # Indent lines with tabs instead of spaces. default === false
