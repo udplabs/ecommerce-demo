@@ -37,7 +37,7 @@ npm run serve
 
 This will start the Firebase emulators for cloud functions and hosting.
 
-`insert screenshot here`
+![Firebase emulator](https://github.com/udplabs/ecommerce-demo/blob/experimental/combined-servers/public/images/firebase-emulator.png?raw=true)
 
 Note the URL and port of the hosting service now running. In my example,
 my ecommerce demo is running at 
