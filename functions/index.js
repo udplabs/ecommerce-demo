@@ -63,7 +63,6 @@ const authConfig = {
 	issuerBaseURL: ISSUER_BASE_URL,
 	clientID: CLIENT_ID,
 	clientSecret: CLIENT_SECRET,
-    sameSite: 'none',
 	authorizationParams: {
 		response_type: RESPONSE_TYPE,
 		audience: AUDIENCE,
