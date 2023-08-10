@@ -17,23 +17,23 @@ const purchases = [
 
 const {
 	ISSUER_BASE_URL,
-	AUDIENCE,
-	BANK_AUDIENCE,
 	CLIENT_ID,
 	CLIENT_SECRET,
-	RESPONSE_TYPE,
+	AUDIENCE,
 	SCOPE,
+	RESPONSE_TYPE,
 	SESSION_SECRET,
 	APP_URL,
-	PKJWT_ISSUER,
-	PKJWT_CLIENT_ID,
-	PKJWT_REDIRECT_URI,
-	PVT_KEY,
+	BANK_ISSUER,
+	BANK_CLIENT_ID,
+	BANK_AUDIENCE,
 	BANK_AUD_SCOPES,
+	BANK_REDIRECT_URI,
+	PVT_KEY,
 } = process.env
 
 const express = require('express')
-const cors = require('cors')
+const cors = require('cors')({origin: true})
 const morgan = require('morgan')
 const logger = require('./winston')
 const bodyParser = require('body-parser')
@@ -63,12 +63,7 @@ const authConfig = {
 	issuerBaseURL: ISSUER_BASE_URL,
 	clientID: CLIENT_ID,
 	clientSecret: CLIENT_SECRET,
-	// session: {
-	// 	//@ts-ignore
-	// 	cookie: {
-	// 		domain: '.atko.rocks',
-	// 	},
-	// },
+    sameSite: 'none',
 	authorizationParams: {
 		response_type: RESPONSE_TYPE,
 		audience: AUDIENCE,
@@ -77,7 +72,7 @@ const authConfig = {
 }
 
 const app = express()
-app.use(cors())
+app.use(cors)
 
 // new stuff for the front end
 app.set('views', path.join(__dirname, 'views'))
@@ -104,14 +99,14 @@ app.use(
 
 app.get('/', async (req, res, next) => {
 	try {
-		auth0Issuer = await Issuer.discover(`${PKJWT_ISSUER}`)
+		auth0Issuer = await Issuer.discover(`${BANK_ISSUER}`)
 		await keystore.add(privateKey, 'pem')
 
 		client = new auth0Issuer.Client(
 			{
-				client_id: PKJWT_CLIENT_ID,
+				client_id: BANK_CLIENT_ID,
 				token_endpoint_auth_method: 'private_key_jwt',
-				redirect_uris: [PKJWT_REDIRECT_URI],
+				redirect_uris: [BANK_REDIRECT_URI],
 			},
 			keystore.toJSON(true)
 		)
@@ -176,7 +171,7 @@ app.get('/prepare-transaction', requiresAuth(), async (req, res) => {
 
 app.get('/resume-transaction', requiresAuth(), async (req, res, next) => {
 	const tokenSet = await client.callback(
-		PKJWT_REDIRECT_URI,
+		BANK_REDIRECT_URI,
 		{ code: req.query.code },
 		{ nonce: '132123' }
 	)
@@ -269,7 +264,7 @@ app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
 			console.log('PAR response', response)
 
 			res.redirect(
-				`${PKJWT_ISSUER}/authorize?client_id=${process.env.PKJWT_CLIENT_ID}&request_uri=${response.request_uri}`
+				`${BANK_ISSUER}/authorize?client_id=${process.env.BANK_CLIENT_ID}&request_uri=${response.request_uri}`
 			)
 
 			return
