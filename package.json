@@ -15,7 +15,7 @@
     "init": "npm install --prefix ./functions",
     "serve": "firebase emulators:start --only functions,hosting",
     "lint": "eslint ./functions",
-    "deploy": "firebase deploy --only functions"
+    "deploy": "firebase deploy --only functions,hosting"
   },
   "keywords": [
     "auth0",
@@ -26,13 +26,7 @@
     "labs"
   ],
   "dependencies": {
-    "concurrently": "^6.3.0",
-    "dotenv": "10.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "node-jose": "^2.1.1",
-    "openid-client": "^5.1.10",
-    "prettier": "^2.4.1",
-    "web-app-express": "file:src/web-app"
+    "prettier": "^2.4.1"
   },
   "devDependencies": {
     "eslint": "^8.46.0",
