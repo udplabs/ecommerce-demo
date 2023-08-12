@@ -1,4 +1,3 @@
-// const { onRequest } = require('firebase-functions/v2/https')
 const dotenv = require('dotenv')
 dotenv.config({ path: '.env' })
 
@@ -31,6 +30,7 @@ const {
 	BANK_REDIRECT_URI,
 	PVT_KEY,
 } = process.env
+const PORT = process.env.PORT || 8080
 
 const express = require('express')
 const cors = require('cors')({ origin: true })
@@ -237,16 +237,16 @@ app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
 				{
 					type: type,
 					amount: amount,
-					transferFrom: transferFrom,
-					transferTo: transferTo,
+					from: transferFrom,
+					to: transferTo,
 				},
 			]
 
 			req.session.pendingTransaction = {
-				type: 'Purchase',
+				type: type,
 				amount: amount,
-				transferFrom: transferFrom,
-				transferTo: transferTo,
+				from: transferFrom,
+				to: transferTo,
 			}
 
 			const authorization_request = {
@@ -320,9 +320,8 @@ app.use((req, res, next) => {
 	next(createError(404))
 })
 
-const port = process.env.PORT || 8080
-app.listen(port, () => {
-	console.log(`App listening on port ${port}`)
+app.listen(PORT, () => {
+	console.log(`App listening on port ${PORT}`)
 })
 
 module.exports = app
