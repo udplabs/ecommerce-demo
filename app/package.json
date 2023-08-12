@@ -1,0 +1,37 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon --watch index.js --watch views --watch .env",
+    "build": "gcloud builds submit --tag gcr.io/ecommerce-demo-254ec/ecommerce-store .",
+    "deploy": "gcloud run deploy ecommerce-store --image gcr.io/ecommerce-demo-254ec/ecommerce-store --region us-central1 --allow-unauthenticated"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "base64url": "^3.0.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-openid-connect": "^2.16.0",
+    "express-session": "^1.17.3",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.4.1",
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0",
+    "node-jose": "^2.2.0",
+    "pug": "^3.0.2",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0",
+    "nodemon": "^3.0.1"
+  },
+  "private": true
+}

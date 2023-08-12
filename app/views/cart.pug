@@ -1,0 +1,55 @@
+extends layout.pug
+
+block content
+    .cart
+        .text-wrapper-4 Delivery Options
+        .text-wrapper-5 Payment Options
+        .frame-wrapper
+            .frame-3
+                h1(class="h-1") Your Cart
+        .frame-4
+            .frame-3
+                .text-wrapper-6 Order Summary
+            p(class="products")
+                | Products   $100
+            p(class='products')
+                | Delivery   $10
+            img(class="line-2" alt="Line" src="/static/images/line-3.svg")
+            p(class="total")
+                | Total      $110
+        .frame-5
+            .frame-6
+            .frame-7
+                .text-wrapper-2 Natural Plants
+                .text-wrapper-7 $100.00
+        .group
+            .overlap
+                .overlap-group-wrapper
+                    .overlap-group
+                        .text-wrapper-8 Change Slot
+                p(class="p") August 10th 2023 07:00 - 19:00
+                .text-wrapper-9 Parcel Delivery
+                p(class="text-wrapper-10") Estimated delivery date - Earliest
+                .text-wrapper-11 $10
+        .overlap-2
+            .overlap-wrapper
+                .overlap
+                    form(action='/submit-transaction', method='POST')
+                        input(type='hidden', name='type', value='Online Purchase')
+                        input(type='hidden', name='amount', value='110.00')
+                        input(type='hidden', name='transferFrom', value='Okta Bank')
+                        input(type='hidden', name='transferTo', value='Atko Green')
+                        ul.payment-type
+                            li
+                                input(type='radio')
+                                | Credit or Debit Card 
+                            li 
+                                input(type='radio')
+                                | PayPal 
+                            li 
+                                input(type='radio')
+                                | Bank 
+                                select 
+                                    option Choose One 
+                                    option Okta Bank 
+                        input(type='Submit', value='Continue')
