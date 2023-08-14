@@ -1,0 +1,16 @@
+*.md
+*.env**.md
+# *.env*
+*.pem
+*.png
+*.jpg
+*.jpeg
+*.log
+*.txt
+LICENSE
+
+# Directories
+**/dist/**
+**/lib/**
+lib/
+**/build/**

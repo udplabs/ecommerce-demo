@@ -40,6 +40,7 @@
     "web-app-express": "file:src/web-app"
   },
   "devDependencies": {
+    "eslint": "^8.46.0",
     "nodemon": "^3.0.1"
   }
 }
