@@ -1,15 +1,37 @@
-# auth0-webapp
+# ecommerce-demo
 
-This is a simple web-app that uses Auth0 Open ID Connect capabilites to authenticate users and get their permission to consume an API. The code is based on https://github.com/auth0-training/labs-node-working-with-apis.
+An example ecommerce site showcasing Okta's new Financial Grade Identity (FGI)
+functionality. It uses pushed authorization requests (PAR) to securely
+transmit transaction details for appoval via a custom mobile push notification.
 
-To run simply add information from your Auth0 Tenant to the .env file, and then run from vscode (it is also ready to use the Remote - Containers extension - see https://code.visualstudio.com/docs/remote/containers) or manually run both api en web-app processes as follows:
+## Setup
 
-```
-npm install --prefix ./src/web-app
-npm start --prefix ./src/web-app
+**Local Environment**
+
+Make a copy of `.env.sample` and save it as `.env` in the `app` folder.
+Fill in the details for your two applications; you can run this demo inside a
+single tenant with two applications, but for storytelling, it works better if
+you have two separate tenants: one for the store and one for the bank.
+
+**CIC Tenant**
+
+Create a new regular web application in your tenant. This will be the plant
+store.
+
+### Install Dependencies
+
+Install the dependencies by running:
+
+```bash
+npm install
 ```
 
+### Running the Demo
+
+To run the demo locally:
+
+```bash
+npm run dev
 ```
-npm install --prefix ./src/api
-npm start --prefix ./src/api
-```
+
+This will start a development server on `http://localhost:8080`.

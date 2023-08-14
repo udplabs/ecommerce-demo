@@ -1,41 +1,51 @@
-process.on('uncaughtException', function (err) {
-	console.log(err)
-})
+const dotenv = require('dotenv')
+dotenv.config({ path: '.env' })
+
+const purchases = [
+	{
+		date: new Date(),
+		description: 'Purchase from Atko Green paid via Okta Bank',
+		value: 102,
+	},
+	{
+		date: new Date(),
+		description: 'Purchase from Atko Green paid via Okta Bank',
+		value: 42,
+	},
+]
 
 const {
-	checkUrl,
-	ISSUER_BASE_URL, // Auth0 Tenant Url
-	CLIENT_ID, // Auth0 Web App Client
-	CLIENT_SECRET, // Auth0 Web App CLient Secret
-	RESPONSE_TYPE,
+	ISSUER_BASE_URL,
+	CLIENT_ID,
+	CLIENT_SECRET,
 	AUDIENCE,
 	SCOPE,
-	SESSION_SECRET, // Cookie Encryption Key
-	APP_PORT,
-	PORT,
-	APP_URL, // Public URL for this app
-	API_URL, // URL for Expenses API
-	PKJWT_ISSUER,
-	PKJWT_CLIENT_ID,
-	PKJWT_REDIRECT_URI,
-	PVT_KEY,
+	RESPONSE_TYPE,
+	SESSION_SECRET,
+	APP_URL,
+	BANK_ISSUER,
+	BANK_CLIENT_ID,
 	BANK_AUDIENCE,
 	BANK_AUD_SCOPES,
-} = require('./env-config')
+	BANK_REDIRECT_URI,
+	PVT_KEY,
+} = process.env
+const PORT = process.env.PORT || 8080
 
 const express = require('express')
+const cors = require('cors')({ origin: true })
+const morgan = require('morgan')
+const logger = require('./winston')
+const bodyParser = require('body-parser')
+
+// add-ons for the front end
 const session = require('express-session')
 const createError = require('http-errors')
 const cookieParser = require('cookie-parser')
-const morgan = require('morgan')
-const logger = require('./winston')
 const path = require('path')
-const { createServer } = require('http')
 const { auth, requiresAuth } = require('express-openid-connect')
-const { Issuer, generators } = require('openid-client')
+const { Issuer } = require('openid-client')
 const { JWK } = require('node-jose')
-const axios = require('axios').default
-const jwt = require('jsonwebtoken')
 
 var privateKey = PVT_KEY
 var keystore = JWK.createKeyStore()
@@ -61,19 +71,16 @@ const authConfig = {
 }
 
 const app = express()
-app.use(checkUrl()) // Used to normalize URL
+app.use(cors)
+
+// new stuff for the front end
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
+app.use('/static', express.static('public'))
 app.use(auth(authConfig))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(
-	morgan('":method :url :status :res[content-length] - :response-time ms"', {
-		stream: logger.stream,
-	})
-)
 app.use(
 	session({
 		secret: SESSION_SECRET,
@@ -82,18 +89,24 @@ app.use(
 	})
 )
 
-/************* BEGIN webapp routes *************/
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(
+	morgan('":method :url :status :res[content-length] - :response-time ms"', {
+		stream: logger.stream,
+	})
+)
 
 app.get('/', async (req, res, next) => {
 	try {
-		auth0Issuer = await Issuer.discover(`${PKJWT_ISSUER}`)
+		auth0Issuer = await Issuer.discover(`${BANK_ISSUER}`)
 		await keystore.add(privateKey, 'pem')
 
 		client = new auth0Issuer.Client(
 			{
-				client_id: PKJWT_CLIENT_ID,
+				client_id: BANK_CLIENT_ID,
 				token_endpoint_auth_method: 'private_key_jwt',
-				redirect_uris: [PKJWT_REDIRECT_URI],
+				redirect_uris: [BANK_REDIRECT_URI],
 			},
 			keystore.toJSON(true)
 		)
@@ -126,7 +139,6 @@ app.get('/cart', requiresAuth(), async (req, res) => {
 		delete req.session.pendingTransaction
 	}
 
-	//const transaction_amount = req.query && req.query.transaction_amount || 15;
 	res.render('cart', {
 		user: req.oidc && req.oidc.user,
 		id_token: req.oidc && req.oidc.idToken,
@@ -159,10 +171,11 @@ app.get('/prepare-transaction', requiresAuth(), async (req, res) => {
 
 app.get('/resume-transaction', requiresAuth(), async (req, res, next) => {
 	const tokenSet = await client.callback(
-		PKJWT_REDIRECT_URI,
+		BANK_REDIRECT_URI,
 		{ code: req.query.code },
 		{ nonce: '132123' }
 	)
+	console.log(`Token set: ${tokenSet}`)
 
 	if (req.session.pendingTransaction) {
 		console.log(
@@ -173,14 +186,7 @@ app.get('/resume-transaction', requiresAuth(), async (req, res, next) => {
 			const { type, amount, transferFrom, transferTo } =
 				req.session.pendingTransaction
 			// TODO: handle the error case here...
-			await submitTransaction(
-				{ type, amount, transferFrom, transferTo },
-				tokenSet,
-				req
-			)
-			//   res.render("transaction-complete", {
-			//     user: req.oidc && req.oidc.user,
-			//   })
+			submitTransaction({ type, amount, transferFrom, transferTo }, req)
 			res.redirect('/transaction-complete')
 		} catch (err) {
 			console.log('refused to connect')
@@ -199,27 +205,28 @@ app.get('/resume-transaction', requiresAuth(), async (req, res, next) => {
 	}
 })
 
-app.get('/transaction-complete', requiresAuth(), async (req, res, next) => {
+app.get('/transaction-complete', requiresAuth(), async (req, res) => {
 	res.render('transaction-complete', {
 		user: req.oidc && req.oidc.user,
 	})
 })
 
-const submitTransaction = async (payload, tokenSet, req) => {
-	console.log('tokenSet', tokenSet)
-	logger.info(`Send request to API with token type: ${tokenSet.token_type}`)
-	logger.info(`${API_URL}/transaction`)
-	await axios.post(`${API_URL}/transaction`, payload, {
-		headers: {
-			Authorization: `${tokenSet.token_type} ${tokenSet.access_token}`,
-		},
+const submitTransaction = (payload, req) => {
+	const type = payload.type
+	const transferFrom = payload.transferFrom
+	const transferTo = payload.transferTo
+	const amount = payload.amount
+
+	purchases.push({
+		date: new Date(),
+		description: `${type} from ${transferTo} paid via ${transferFrom}`,
+		value: amount,
 	})
 
 	delete req.session.pendingTransaction
 }
 
 app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
-	// console.log(req.body)
 	const type = req.body.type
 	const amount = Number(req.body.amount)
 	const transferFrom = req.body.transferFrom
@@ -230,16 +237,16 @@ app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
 				{
 					type: type,
 					amount: amount,
-					transferFrom: transferFrom,
-					transferTo: transferTo,
+					from: transferFrom,
+					to: transferTo,
 				},
 			]
 
 			req.session.pendingTransaction = {
-				type: 'Purchase',
+				type: type,
 				amount: amount,
-				transferFrom: transferFrom,
-				transferTo: transferTo,
+				from: transferFrom,
+				to: transferTo,
 			}
 
 			const authorization_request = {
@@ -251,11 +258,13 @@ app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
 			}
 			// console.log('PAR', pushed_authz_request)
 
-			const response = await client.pushedAuthorizationRequest(authorization_request)
+			const response = await client.pushedAuthorizationRequest(
+				authorization_request
+			)
 			console.log('PAR response', response)
 
 			res.redirect(
-				`${PKJWT_ISSUER}/authorize?client_id=${process.env.PKJWT_CLIENT_ID}&request_uri=${response.request_uri}`
+				`${BANK_ISSUER}/authorize?client_id=${process.env.BANK_CLIENT_ID}&request_uri=${response.request_uri}`
 			)
 
 			return
@@ -275,22 +284,15 @@ app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
 app.get('/balance', requiresAuth(), async (req, res, next) => {
 	try {
 		if (responseTypesWithToken.includes(RESPONSE_TYPE)) {
-			let { token_type, access_token } = req.oidc.accessToken
-			logger.info(`Send request to API with token type: ${token_type}`)
-			let balance = await axios.get(`${API_URL}/balance`, {
-				headers: {
-					Authorization: `${token_type} ${access_token}`,
-				},
-			})
-			let transactionHistory = await axios.get(`${API_URL}/reports`, {
-				headers: {
-					Authorization: `${token_type} ${access_token}`,
-				},
-			})
+			let totalPurchases = purchases.reduce(
+				(accum, purchase) => accum + purchase.value,
+				0
+			)
+
 			res.render('balance', {
 				user: req.oidc && req.oidc.user,
-				balance: balance.data.balance,
-				purchases: transactionHistory.data,
+				balance: totalPurchases,
+				purchases: purchases,
 			})
 		} else {
 			next(
@@ -305,89 +307,21 @@ app.get('/balance', requiresAuth(), async (req, res, next) => {
 	}
 })
 
-// app.get('/consent', async (req, res, next) => {
-// 	let sessionToken = req.query.session_token
+app.get('/api', (request, response) => {
+	response.status(200).end('OK')
+})
 
-// 	const claims = jwt.decode(sessionToken) // using jose library to decode JWT
-// 	console.log(claims)
-// 	if (!claims.authorization_details) {
-// 		throw new Error('authorization details claim required')
-// 	}
-// 	req.session['transaction_linking_id'] = claims.transaction_linking_id
-// 	req.session[claims.transaction_linking_id] = claims.authorization_details
-
-// 	res.render('consent', {
-// 		authorization_details: claims.authorization_details,
-// 		state: req.query.state,
-// 		sub: claims.sub,
-// 	})
-// })
-
-// app.post('/consent/accept', async (req, res, next) => {
-// 	let authz_details = JSON.parse(req.body.authorization_details)
-// 	console.log(authz_details)
-// 	authz_details.accountId = 'ABC123'
-
-// 	let payload = {
-// 		iss: PKJWT_CLIENT_ID, // YOUR CLIENT_ID
-// 		sub: req.body.sub,
-// 		exp: Math.floor(Date.now() / 1000) + 60,
-// 		decision: 'accept',
-// 		state: req.body.state,
-// 		authorization_details: authz_details,
-// 	}
-
-// 	let token = jwt.sign(payload, 'ABC')
-
-// 	console
-
-// 	res.redirect(
-// 		`${PKJWT_ISSUER}/continue?state=${req.body.state}&consentToken=${token}`
-// 	)
-// })
-
-// app.post('/consent/deny', async (req, res, next) => {
-// 	let payload = {
-// 		iss: PKJWT_CLIENT_ID, // YOUR CLIENT_ID
-// 		sub: req.body.sub,
-// 		exp: Math.floor(Date.now() / 1000) + 60,
-// 		decision: 'deny',
-// 		state: req.body.state,
-// 		authorization_details: authz_details,
-// 	}
-
-// 	let token = jwt.sign(payload, 'ABC')
-
-// 	res.redirect(
-// 		`${PKJWT_ISSUER}/continue?state=${req.body.state}&consentToken=${token}`
-// 	)
-// })
+app.get('/api/timestamp', (request, response) => {
+	response.send(`${Date.now()}`)
+})
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
 	next(createError(404))
 })
 
-// error handler
-app.use(function (err, req, res, next) {
-	if (err.error === 'access_denied') {
-		// Crude way of handling the unauthorized error from the authorization server.
-		// We must redirect back to the /prepare-transaction page, but be sure to capture that the transaction was denied.
-		res.redirect('/prepare-transaction?error=access_denied')
-		return
-	}
-	res.locals.message = err.message
-	res.locals.error = err
-
-	logger.error(`${err.message}`)
-
-	// render the error page
-	res.status(err.status || 500)
-	res.render('error', {
-		user: req.oidc && req.oidc.user,
-	})
+app.listen(PORT, () => {
+	console.log(`App listening on port ${PORT}`)
 })
 
-createServer(app).listen(PORT || APP_PORT, () => {
-	logger.info(`WEB APP listening on port: ${APP_URL}`)
-})
+module.exports = app
