@@ -2,21 +2,6 @@ extends layout
 
 block content
   .content
-<<<<<<< HEAD:app/views/balance.pug
-    h1 My Purchases
-    p
-    p
-      | This is your purchase history:
-    table(border='1')
-      tr
-        each key in Object.keys(purchases[0])
-          th
-            strong=key
-      each purchase in purchases
-        tr
-          each key in Object.keys(purchase)
-            td=purchase[key]
-=======
     h4 My Purchases
     table.styled-table
       thead
@@ -29,24 +14,3 @@ block content
             tr
               each key in Object.keys(purchase)
                 td=purchase[key]
-
-    //-   if user
-    //-     a(href='/user')=user.name
-    //-     |, your sweet tooth has made you do this!
-    //-     |
-    //-     strong=balance
-    //-     |
-    //-     |Cookies!
-    //- p
-    //-   | This is your purchase history:
-    //- table(border='1')
-    //-   tr
-    //-     each key in Object.keys(purchases[0])
-    //-       th
-    //-         strong=key
-    //-   each purchase in purchases
-    //-     tr
-    //-       each key in Object.keys(purchase)
-    //-         td=purchase[key]
-    //- p
->>>>>>> main:src/web-app/views/balance.pug

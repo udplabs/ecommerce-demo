@@ -3,24 +3,12 @@ html
     head
         meta(charset='UTF-8')
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
-<<<<<<< HEAD:app/views/layout.pug
-        title Atko Green - Plants for all Occaisions
-        //link(rel='icon' href='/favicon.png')
-        //link(rel='preload' as='font' type='font/woff2', crossorigin, href='https://cdn.auth0.com/styleguide/core/2.0.1/fonts/fakt/FaktPro-Normal.woff2')
-        link(rel='stylesheet' href='/static/stylesheets/style.css')
-        link(rel="icon" type="image/x-icon" href="/static/favicon.ico")
-    body
-        .div
-            .grid
-                .box
-                    a(href='/')
-                        h1 AtkoGreen
-=======
         title AtkoGreen 
         //link(rel='icon' href='/favicon.png')
         //link(rel='preload' as='font' type='font/woff2', crossorigin, href='https://cdn.auth0.com/styleguide/core/2.0.1/fonts/fakt/FaktPro-Normal.woff2')
-        link(rel='stylesheet' href='/stylesheets/ecom-style.css')
+        link(rel='stylesheet' href='/static/stylesheets/style.css')
         link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200")
+        link(rel="icon" type="image/x-icon" href="/static/favicon.ico")
     body
         .div
             .grid
@@ -31,7 +19,6 @@ html
                 //- .box(class='text-wrapper-2') Home 2
                 //- .box(class='text-wrapper-3') Products 3
                 //- .box(class='text-wrapper-3') Contacts 4
->>>>>>> main:src/web-app/views/layout.pug
                 .box(class='text-wrapper-2')
                     ul(class='menu-list')
                         li
@@ -42,12 +29,6 @@ html
                     ul(class='menu-list')
                         li <i class="material-symbols-outlined" fontSize="large">shopping_cart</i> 
                         li 
-<<<<<<< HEAD:app/views/layout.pug
-                            a(href='/logout') Logout
-                .box
-                    img(class="img" alt="Cart" src="/static/images/cart.svg")
-                .box(class='text-wrapper-2')
-=======
                             a.logout(href='/login')
                                 <i class="material-symbols-outlined" fontSize="large">person</i>
                 .box(class='text-wrapper-3')
@@ -57,62 +38,34 @@ html
                             <i class="material-symbols-outlined" fontSize="large">shopping_cart</i>
                         if user
                             li 
-                             p.loggedin Hello, 
-                              a.basic(href='/user')=user.name
+                                p.loggedin Hello, 
+                                    a.basic(href='/user')=user.name
                             li 
-                             a.basic(href='/logout')
-                                <i class="material-symbols-outlined" fontSize="large">logout</i>
+                                a.basic(href='/logout')
+                                    <i class="material-symbols-outlined" fontSize="large">logout</i>
                         else
                             li 
                             a.logout(href='/login')
                                 <i class="material-symbols-outlined" fontSize="large">person</i> 
                 //- .box(class='text-wrapper-2')
->>>>>>> main:src/web-app/views/layout.pug
                     if user
                         p Hello, 
                             a(href='/user')=user.name
-                        //- img(class="img" alt="Person" src="/static/images/person.svg")
+                        //- img(class="img" alt="Person" src="/images/person.svg")
                     else
                         //- a.login(href='/login') Log In
                         a.logout(href='/login')
                             //-<span class="material-symbols-outlined">person</span>
                             <i class="material-symbols-outlined" fontSize="large">person</i>
                 //- .box
-                //-     img(class="line" alt="Line" src="/static/images/line-1.svg")
+                //-     img(class="line" alt="Line" src="/images/line-1.svg")
                 //-     | 5
                 //- .box
-                //-     img(class="img" alt="Filter right" src="/static/images/filterright.svg")
+                //-     img(class="img" alt="Filter right" src="/images/filterright.svg")
                 //-     | 6
 
             block content
-            
-<<<<<<< HEAD:app/views/layout.pug
-            .home-page
-                .about-us
-                    .frame-19
-                        .frame-20
-                            .text-wrapper-10 About us
-                            p(class="text-wrapper-11") Order now and appreciate the beauty of nature
-                        .frame-21
-                            .frame-20
-                                .frame-22
-                                    .img-wrapper
-                                        img(class="img-2" alt="Vector" src="/static/images/vector-1.svg")
-                                    .text-wrapper-12 Large Assortment
-                                p(class="text-wrapper-13") we offer many different types of products with fewer variations in each category.
-                            .frame-20
-                                .frame-22
-                                    .img-wrapper
-                                        img(class="img-2" alt="Vector" src="/static/images/vector.svg")
-                                    .text-wrapper-12 Fast &amp; Free Shipping
-                                p(class="text-wrapper-13") 4-day or less delivery time, free shipping and an expedited delivery option.
-                            .frame-20
-                                .frame-22
-                                    .img-wrapper
-                                        img(class="img-2" alt="Telephone outbound" src="/static/images/telephoneoutbound.svg")
-                                    .text-wrapper-12 24/7 Support
-                                p(class="text-wrapper-13") answers to any business related inquiry 24/7 and in real-time.
-=======
+
             //- .home-page
             //-     .about-us
             //-         .frame-19
@@ -138,4 +91,3 @@ html
             //-                             img(class="img-2" alt="Telephone outbound" src="/images/telephoneoutbound.svg")
             //-                         .text-wrapper-12 24/7 Support
             //-                     p(class="text-wrapper-13") answers to any business related inquiry 24/7 and in real-time.
->>>>>>> main:src/web-app/views/layout.pug

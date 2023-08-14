@@ -1,41 +1,46 @@
 extends layout
 
 mixin token(token, type)
-    li.dropdown
-        img.dropbtn(height="40px",src=`/static/images/icon-${type}.svg`)
-        .dropdown-content
-            a(href='javascript:;', onclick=`navigator.clipboard.writeText("${token}")`)
-                img(height="20px" src="/static/images/clipboard_indigo.png" alt="Copy")
-                |
-                | Copy
-            a(target='_blank',href=`https://jwt.io?token=${token}`)
-                img(height="20px" src="/static/images/jwt.svg" alt="Inspect")
-                |
-                | Inspect
+  li.dropdown
+    img.dropbtn(height="40px",src=`/static/images/icon-${type}.svg`)
+    .dropdown-content
+      a(href='javascript:;', onclick=`navigator.clipboard.writeText("${token}")`)
+        img(height="20px",src="/static/images/clipboard_indigo.png", alt="Copy")
+        |
+        | Copy
+      a(target='_blank',href=`https://jwt.io?token=${token}`)
+        img(height="20px",src="/static/images/jwt.svg", alt="Inspect")
+        |
+        | Inspect
 
 block content
-    h1=user.name
+  .content
+    h4=user.name
     ul.token-set
-        li
-            h4 Tokens:
-        if id_token
-            +token(id_token, 'id-token')
-        if access_token
-            +token(access_token.access_token, 'access-token')
-        if refresh_token
-            +token(refresh_token, 'refresh-token')
-    table(border='1')
+      li
+        h4 Tokens:
+      if id_token
+        +token(id_token, 'id-token')
+      if access_token
+        +token(access_token.access_token, 'access-token')
+      if refresh_token
+        +token(refresh_token, 'refresh-token')
+
+    table.styled-table
+      thead
         tr
-            th name
-            th value
+          th Name
+          th Value
         each key in Object.keys(user)
+          tbody
             tr
-                td=key
-                td=user[key]
+              td=key
+              td=user[key]
+
     if access_token
-        -
-            const date = new Date();
-            date.setSeconds(date.getSeconds() + access_token.expires_in);
-            console.log(date);
-        p=`Access Token Expires: ${date.toLocaleString('en-US')}`
+      -
+        const date = new Date();
+        date.setSeconds(date.getSeconds() + access_token.expires_in);
+        console.log(date);
+      p.loggedin=`Access Token Expires: ${date.toLocaleString('en-US')}`
 
