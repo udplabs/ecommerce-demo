@@ -15,7 +15,7 @@ mixin token(token, type)
 
 block content
   .content
-    h1=user.name
+    h4=user.name
     ul.token-set
       li
         h4 Tokens:
@@ -25,18 +25,22 @@ block content
         +token(access_token.access_token, 'access-token')
       if refresh_token
         +token(refresh_token, 'refresh-token')
-    table(border='1')
-      tr
-        th name
-        th value
-      each key in Object.keys(user)
+
+    table.styled-table
+      thead
         tr
-          td=key
-          td=user[key]
+          th Name
+          th Value
+        each key in Object.keys(user)
+          tbody
+            tr
+              td=key
+              td=user[key]
+
     if access_token
       -
         const date = new Date();
         date.setSeconds(date.getSeconds() + access_token.expires_in);
         console.log(date);
-      p=`Access Token Expires: ${date.toLocaleString('en-US')}`
+      p.loggedin=`Access Token Expires: ${date.toLocaleString('en-US')}`
 

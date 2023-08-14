@@ -137,6 +137,12 @@ h4 {
   font-size: 18px;
 }
 
+h5 {
+    color: var(--color-2);
+    font-family: "Poppins", Helvetica;
+    font-size: 12px;
+  }
+
 .home-page .frame {
   align-items: flex-start;
   display: inline-flex;
@@ -202,8 +208,8 @@ h4 {
   height: 512px;
   /*left: 96px;*/
   overflow: hidden;
-  position: absolute;
-  top: 80px;
+  position: relative;
+  top: 40px;
   width: 1248px;
   /* border: 2px solid #f00; */
 }
@@ -380,8 +386,8 @@ h4 {
   display: inline-flex;
   flex-direction: column;
   gap: 24px;
-  /* left: 250px; */
-  position: relative;
+  left: 250px;
+  position: absolute;
   top: 700px;
 }
 
@@ -439,9 +445,9 @@ h4 {
   display: inline-flex;
   flex-direction: column;
   gap: 12px;
-  /* left: 550px; */
-  position: relative;
-  top: 600px;
+  left: 550px;
+  position: absolute;
+  top: 700px;
 }
 
 .home-page .frame-13 {
@@ -479,9 +485,9 @@ h4 {
   display: inline-flex;
   flex-direction: column;
   gap: 12px;
-  /* left: 950px; */
-  position: relative;
-  top: 600px;
+  left: 950px;
+  position: absolute;
+  top: 700px;
 }
 
 .home-page .frame-16 {
@@ -499,9 +505,9 @@ h4 {
   display: inline-flex;
   flex-direction: column;
   gap: 12px;
-  /* left: 1350px; */
-  position: relative;
-  top: 600px;
+  left: 1350px;
+  position: absolute;
+  top: 700px;
 }
 
 .home-page .frame-18 {
@@ -1292,4 +1298,38 @@ p.loggedin {
 
 .dropdown:hover .dropbtn {
   background-color: #f1f1f1;
+}
+
+input[type="radio"] {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #fff;
+	border-radius: 50%;
+	margin-right: 10px;
+	background-color: transparent;
+	position: relative;
+	top: 6px;
+}
+
+input[type="radio"]:checked::before {
+	content: "";
+	display: block;
+	width: 12px;
+	height: 12px;
+	background-color: #ca8489;
+	border-radius: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	animation: appear 0.8s;
+}
+
+label {
+	font-size: 18px;
+	font-weight: bold;
+	color: var(--color-1);
+    font-family: "Poppins", Helvetica;
 }

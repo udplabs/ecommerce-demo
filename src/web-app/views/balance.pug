@@ -2,8 +2,19 @@ extends layout
 
 block content
   .content
-    h1 My Purchases
-    p
+    h4 My Purchases
+    table.styled-table
+      thead
+        tr
+          each key in Object.keys(purchases[0])
+            th
+              strong=key
+        each purchase in purchases
+          tbody
+            tr
+              each key in Object.keys(purchase)
+                td=purchase[key]
+
     //-   if user
     //-     a(href='/user')=user.name
     //-     |, your sweet tooth has made you do this!
@@ -11,14 +22,15 @@ block content
     //-     strong=balance
     //-     |
     //-     |Cookies!
-    p
-      | This is your purchase history:
-    table(border='1')
-      tr
-        each key in Object.keys(purchases[0])
-          th
-            strong=key
-      each purchase in purchases
-        tr
-          each key in Object.keys(purchase)
-            td=purchase[key]
+    //- p
+    //-   | This is your purchase history:
+    //- table(border='1')
+    //-   tr
+    //-     each key in Object.keys(purchases[0])
+    //-       th
+    //-         strong=key
+    //-   each purchase in purchases
+    //-     tr
+    //-       each key in Object.keys(purchase)
+    //-         td=purchase[key]
+    //- p

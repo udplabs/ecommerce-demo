@@ -1,9 +1,8 @@
 extends layout
 
 block content
-    h1 Congratulations! Your transaction succeeded!
-    p
-        | Check your
-        |
-        a(href='/balance')="Account Balance"
-        | .
+  .content
+    h4 Congratulations! Your transaction succeeded!
+        li 
+            p.loggedin Check your 
+            a.basic(href='/balance')="Account Balance"
