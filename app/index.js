@@ -183,10 +183,10 @@ app.get('/resume-transaction', requiresAuth(), async (req, res, next) => {
 			req.session.pendingTransaction
 		)
 		try {
-			const { type, amount, transferFrom, transferTo } =
+			const { type, amount, from, to } =
 				req.session.pendingTransaction
 			// TODO: handle the error case here...
-			submitTransaction({ type, amount, transferFrom, transferTo }, req)
+			submitTransaction({ type, amount, from, to }, req)
 			res.redirect('/transaction-complete')
 		} catch (err) {
 			console.log('refused to connect')
@@ -213,8 +213,8 @@ app.get('/transaction-complete', requiresAuth(), async (req, res) => {
 
 const submitTransaction = (payload, req) => {
 	const type = payload.type
-	const transferFrom = payload.transferFrom
-	const transferTo = payload.transferTo
+	const transferFrom = payload.from
+	const transferTo = payload.to
 	const amount = payload.amount
 
 	purchases.push({
