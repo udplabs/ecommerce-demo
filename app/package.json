@@ -3,7 +3,7 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --watch index.js --watch views --watch .env",
+    "dev": "nodemon -r dotenv/config index.js",
     "build": "gcloud builds submit --tag gcr.io/ecommerce-demo-254ec/ecommerce-store .",
     "deploy": "gcloud run deploy ecommerce-store --image gcr.io/ecommerce-demo-254ec/ecommerce-store --region us-central1 --allow-unauthenticated"
   },
