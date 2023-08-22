@@ -1,16 +1,19 @@
 extends layout
 
 block content
-  .content
-    h4 My Purchases
-    table.styled-table
-      thead
-        tr
-          each key in Object.keys(purchases[0])
-            th
-              strong=key
-        each purchase in purchases
-          tbody
+  .balance
+    .content
+      .frame-wrapper
+      .text-wrapper-1 My Purchases
+      .text-wrapper-2
+        table.styled-table
+          thead
             tr
-              each key in Object.keys(purchase)
-                td=purchase[key]
+              each key in Object.keys(purchases[0])
+                th
+                  strong=key
+            each purchase in purchases
+              tbody
+                tr
+                  each key in Object.keys(purchase)
+                    td=purchase[key]

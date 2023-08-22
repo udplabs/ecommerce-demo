@@ -2,11 +2,11 @@ extends layout.pug
 
 block content
     .cart
-        .text-wrapper-4 Delivery Options
-        .text-wrapper-5 Payment Options
         .frame-wrapper
             .frame-3
                 h1(class="h-1") Your Cart
+        .text-wrapper-4 Delivery Options
+        .text-wrapper-5 Payment Options
         .frame-4
             .frame-3
                 .text-wrapper-6 Order Summary
@@ -14,19 +14,20 @@ block content
                 | Products   $100
             p(class='products')
                 | Delivery   $10
-            img(class="line-2" alt="Line" src="/static/images/line-3.svg")
+                img(class="line-2" alt="Line" src="/static/images/line-3.svg")
             p(class="total")
                 | Total      $110
         .frame-5
             .frame-6
             .frame-7
+                img(src="/static/images/frame-9.svg")
                 .text-wrapper-2 Natural Plants
                 .text-wrapper-7 $100.00
         .group
             .overlap
                 .overlap-group-wrapper
                     .overlap-group
-                        .text-wrapper-8 Change Slot
+                        a.account(href='/balance') Delivery Date
                 p(class="p") August 10th 2023 07:00 - 19:00
                 .text-wrapper-9 Parcel Delivery
                 p(class="text-wrapper-10") Estimated delivery date - Earliest
@@ -44,12 +45,14 @@ block content
                                 input(type='radio' id="card" value="card")
                                 <label for="card">Credit or Debit Card</label> 
                             li 
-                                input(type='radio')
+                                input(type='radio' id='paypal')
                                 | PayPal 
                             li 
-                                input(type='radio')
+                                input(type='radio' id='bank')
                                 | Bank 
                                 select 
                                     option Choose One 
                                     option Okta Bank 
-                        input(type='Submit', value='Continue')
+                                    option Acme Bank 
+                                    option Bank of Plantco 
+                        input(type='Submit', id='submit', value='Continue')

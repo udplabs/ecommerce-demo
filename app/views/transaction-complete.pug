@@ -1,8 +1,17 @@
 extends layout
 
 block content
-  .content
-    h4 Congratulations! Your transaction succeeded!
-        li 
-            p.loggedin Check your 
-            a.basic(href='/balance')="Account Balance"
+  .home-page
+    .hero
+      .overlap
+        .frame-4
+          .frame-5
+            .text-wrapper-4 Congratulations!
+            .text-wrapper-5 Your transaction has succeeded
+            .frame-6
+              .frame-7
+                .text-wrapper-5 To check your Account Balance
+              .frame-7
+                a.account(href='/balance') Click Here
+      .overlap-3
+          img(class="unsplash" alt="Unsplash" src="/static/images/frame-9.svg")

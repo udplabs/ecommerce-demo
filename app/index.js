@@ -70,6 +70,9 @@ const authConfig = {
 	},
 }
 
+
+console.log("testing auth config",authConfig);
+
 const app = express()
 app.use(cors)
 
@@ -110,6 +113,8 @@ app.get('/', async (req, res, next) => {
 			},
 			keystore.toJSON(true)
 		)
+		
+		console.log("testing client",client)
 
 		res.render('home', {
 			user: req.oidc && req.oidc.user,
@@ -256,7 +261,7 @@ app.post('/submit-transaction', requiresAuth(), async (req, res, next) => {
 				response_type: responseType,
 				authorization_details: JSON.stringify(authorization_details),
 			}
-			// console.log('PAR', pushed_authz_request)
+			console.log('authZ', authorization_request)
 
 			const response = await client.pushedAuthorizationRequest(
 				authorization_request
