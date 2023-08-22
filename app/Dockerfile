@@ -8,7 +8,7 @@ WORKDIR $APP_HOME
 COPY . ./
 
 # Install production dependencies.
-RUN npm install --only=production
+RUN npm install --omit=dev
 
 # Run the web service on container startup.
 ENTRYPOINT [ "npm", "start" ]
