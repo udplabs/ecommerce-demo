@@ -25,7 +25,7 @@ const {
 	BANK_AUDIENCE,
 	BANK_AUD_SCOPES,
 	BANK_REDIRECT_URI,
-	PVT_KEY,
+	//PVT_KEY,
 } = process.env
 const PORT = process.env.PORT || 8080
 
@@ -44,7 +44,7 @@ const { auth, requiresAuth } = require('express-openid-connect')
 const { Issuer } = require('openid-client')
 const { JWK } = require('node-jose')
 
-var privateKey = PVT_KEY
+var privateKey = process.env.PVT_KEY.replace(/\\n/g, "\n")
 var keystore = JWK.createKeyStore()
 var auth0Issuer
 var client
@@ -67,8 +67,7 @@ const authConfig = {
 	},
 }
 
-
-console.log("testing auth config",authConfig);
+console.log('testing auth config', authConfig)
 
 const app = express()
 app.use(cors)
@@ -110,8 +109,8 @@ app.get('/', async (req, res, next) => {
 			},
 			keystore.toJSON(true)
 		)
-		
-		console.log("testing client",client)
+
+		console.log('testing client', client)
 
 		res.render('home', {
 			user: req.oidc && req.oidc.user,
@@ -185,8 +184,7 @@ app.get('/resume-transaction', requiresAuth(), async (req, res, next) => {
 			req.session.pendingTransaction
 		)
 		try {
-			const { type, amount, from, to } =
-				req.session.pendingTransaction
+			const { type, amount, from, to } = req.session.pendingTransaction
 			// TODO: handle the error case here...
 			submitTransaction({ type, amount, from, to }, req)
 			res.redirect('/transaction-complete')
