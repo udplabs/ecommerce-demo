@@ -25,7 +25,6 @@ const {
 	BANK_AUDIENCE,
 	BANK_AUD_SCOPES,
 	BANK_REDIRECT_URI,
-	//PVT_KEY,
 } = process.env
 const PORT = process.env.PORT || 8080
 
