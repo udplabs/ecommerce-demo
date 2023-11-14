@@ -66,7 +66,7 @@ const authConfig = {
 	},
 }
 
-console.log('testing auth config', authConfig)
+//console.log('testing auth config', authConfig)
 
 const app = express()
 app.use(cors)
